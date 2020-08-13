@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using Project2015To2017.Definition;
 using static Project2015To2017.Extensions;
@@ -201,13 +204,40 @@ namespace Project2015To2017.Writing
 			}
 		}
 
+		private List<XElement> CreatePropertyGroups(IReadOnlyCollection<XElement> e)
+		{
+			var items = new List<XElement>();
+			var nodes = e.ToList()[0].Nodes().Cast<XElement>().ToList();
+
+			var x = new XElement("PropertyGroup"
+				, new XAttribute("Label", "Globals")
+				, nodes.Take(4));
+
+			var y = new XElement(new XElement("PropertyGroup"));
+
+			if (nodes.Any(n => n.Name == "UseWPF"))
+				y.Add(nodes.First(n => n.Name == "UseWPF"));
+
+			if (nodes.Any(n => n.Name == "TargetFramework"))
+				y.Add(nodes.First(n => n.Name == "TargetFramework"));
+
+			if (nodes.Any(n => n.Name == "OutputType"))
+				y.Add(nodes.First(n => n.Name == "OutputType"));
+
+			items.Add(x);
+			items.Add(y);
+
+			return items;
+		}
+
 		internal XElement CreateXml(Project project)
 		{
 			var projectNode = new XElement("Project", new XAttribute("Sdk", project.ProjectSdk));
 
 			if (project.PropertyGroups != null)
 			{
-				projectNode.Add(project.PropertyGroups.Select(RemoveAllNamespaces));
+				var items = CreatePropertyGroups(project.PropertyGroups);
+				projectNode.Add(items.Select(RemoveAllNamespaces));
 			}
 
 			if (project.Imports != null)

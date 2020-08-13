@@ -114,11 +114,6 @@ namespace Project2015To2017.Reading
 				var targetFramework = GetUnambiguousFrameworkValue(targetFrameworkAll.unconditional);
 				if (targetFrameworkAll.conditional.Count == 0 && targetFramework != null)
 				{
-					foreach (var tfm in elementValueFunc(targetFramework))
-					{
-						project.TargetFrameworks.Add(tfm);
-					}
-
 					return true;
 				}
 

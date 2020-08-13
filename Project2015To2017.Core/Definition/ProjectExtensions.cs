@@ -10,7 +10,7 @@ namespace Project2015To2017.Definition
 {
 	public static class ProjectExtensions
 	{
-		private static readonly Guid WpfGuid = Guid.ParseExact("60DC8134-EBA5-43B8-BCC9-BB4BC16C2548", "D");
+		public static readonly Guid WpfGuid = Guid.ParseExact("60DC8134-EBA5-43B8-BCC9-BB4BC16C2548", "D");
 
 		public static IEnumerable<XElement> UnconditionalGroups(this Project project)
 		{
@@ -228,6 +228,9 @@ namespace Project2015To2017.Definition
 				return true;
 
 			if (project.Property("ExtrasEnableWpfProjectSetup")?.Value == "true")
+				return true;
+
+			if (project.IsWPF)
 				return true;
 
 			return project.IterateProjectTypeGuids().Any(x => x.guid == WpfGuid);

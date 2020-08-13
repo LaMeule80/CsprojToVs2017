@@ -65,6 +65,8 @@ namespace Project2015To2017.Transforms
 			IDictionary<string, string> globalOverrides,
 			string msbuildProjectName)
 		{
+
+
 			var removeQueue = new List<XElement>();
 
 			List<string> items = new List<string>();
@@ -76,6 +78,14 @@ namespace Project2015To2017.Transforms
 			foreach (var child in propertyGroup.Elements())
 			{
 				var tagLocalName = child.Name.LocalName;
+
+				if (tagLocalName == "ProjectTypeGuids")
+				{
+					var value = child.Value;
+					var values = value.Split(';').Select(x => Guid.Parse(x));
+					project.IsWPF = values.Contains(ProjectExtensions.WpfGuid);
+				}
+
 				if (!items.Contains(tagLocalName))
 					removeQueue.Add(child);
 			}

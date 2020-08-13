@@ -29,7 +29,7 @@ namespace Project2015To2017.Definition
 		public XDocument ProjectDocument { get; set; }
 		public string ProjectName { get; set; }
 
-		public IList<string> TargetFrameworks { get; } = new List<string>();
+		public IList<string> TargetFrameworks { get; } = new List<string>() { "netcoreapp3.1" };
 		public bool? AppendTargetFrameworkToOutputPath { get; set; }
 		public ApplicationType Type { get; set; }
 		public FileInfo FilePath { get; set; }
@@ -38,6 +38,8 @@ namespace Project2015To2017.Definition
 		public Guid? ProjectGuid { get; set; }
 		public string ProjectSdk { get; set; } = "Microsoft.NET.Sdk";
 		public bool Valid { get; set; } = true;
+
+		public bool IsWPF { get; set; }
 
 		public bool HasMultipleAssemblyInfoFiles { get; set; }
 
@@ -98,8 +100,8 @@ namespace Project2015To2017.Definition
 				if (y is null) return false;
 				if (x.GetType() != y.GetType()) return false;
 				return string.Equals(x.ProjectName, y.ProjectName, StringComparison.InvariantCultureIgnoreCase) &&
-				       string.Equals(x.FilePath.FullName, y.FilePath.FullName,
-					       StringComparison.InvariantCultureIgnoreCase);
+					   string.Equals(x.FilePath.FullName, y.FilePath.FullName,
+						   StringComparison.InvariantCultureIgnoreCase);
 			}
 
 			public int GetHashCode(Project obj)
