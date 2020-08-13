@@ -14,9 +14,7 @@ namespace Project2015To2017.Migrate2017.Tool
 		{
 			var transformations = transformationSet.CollectAndOrderTransformations(facility.Logger, conversionOptions);
 
-			var doBackups = AskBinaryChoice("Would you like to create backups?");
-
-			var writer = new ProjectWriter(facility.Logger, new ProjectWriteOptions {MakeBackups = doBackups});
+			var writer = new ProjectWriter(facility.Logger, new ProjectWriteOptions {MakeBackups = false});
 
 			foreach (var project in legacy)
 			{
