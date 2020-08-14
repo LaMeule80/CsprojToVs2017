@@ -39,7 +39,20 @@ namespace Project2015To2017.Definition
 		public string ProjectSdk { get; set; } = "Microsoft.NET.Sdk";
 		public bool Valid { get; set; } = true;
 
-		public bool IsWPF { get; set; }
+		private bool? _isWPF = null;
+		public bool IsWPF
+		{
+			get
+			{
+				if (_isWPF.HasValue)
+					return _isWPF.Value;
+				return AssemblyReferences.Count(c => c.Include == "PresentationCore") > 0;
+			}
+			set
+			{
+				_isWPF = value;
+			}
+		}
 
 		public bool HasMultipleAssemblyInfoFiles { get; set; }
 
