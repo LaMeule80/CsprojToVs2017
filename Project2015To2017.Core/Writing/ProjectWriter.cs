@@ -273,15 +273,9 @@ namespace Project2015To2017.Writing
 					{
 						projectReferenceElement.Add(new XElement("EmbedInteropTypes", "true"));
 					}
+					itemGroup.Add(projectReferenceElement);
 
-					if (projectReference.DefinitionElement != null)
-					{
-						projectReference.DefinitionElement.ReplaceWith(projectReferenceElement);
-					}
-					else
-					{
-						itemGroup.Add(projectReferenceElement);
-					}
+
 				}
 
 				if (itemGroup.HasElements)
@@ -315,11 +309,6 @@ namespace Project2015To2017.Writing
 						nugetReferences.Add(reference);
 					}
 				}
-
-				if (nugetReferences.HasElements)
-				{
-					projectNode.Add(nugetReferences);
-				}
 			}
 
 			if (project.AssemblyReferences?.Count > 0)
@@ -329,7 +318,7 @@ namespace Project2015To2017.Writing
 				{
 					var assemblyReferenceElement = MakeAssemblyReference(assemblyReference);
 
-					if (assemblyReference.DefinitionElement != null)
+					if (assemblyReference.HintPath == null)
 					{
 						assemblyReference.DefinitionElement.ReplaceWith(assemblyReferenceElement);
 					}
@@ -348,9 +337,13 @@ namespace Project2015To2017.Writing
 			// manual includes
 			if (project.ItemGroups?.Count > 0)
 			{
-				foreach (var includeGroup in project.ItemGroups.Select(RemoveAllNamespaces))
+				foreach (var includeGroup in project.ItemGroups
+					.Select(RemoveAllNamespaces))
 				{
-					projectNode.Add(includeGroup);
+					if (!includeGroup.ToString().Contains("Reference"))
+						projectNode.Add(includeGroup);
+					if (includeGroup.ToString().Contains("PackageReference"))
+						projectNode.Add(includeGroup);
 				}
 			}
 
