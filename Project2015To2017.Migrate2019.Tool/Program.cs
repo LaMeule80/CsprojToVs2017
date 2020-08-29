@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.DotNet.Cli.CommandLine;
 using Project2015To2017.Analysis;
 using Project2015To2017.Caching;
@@ -16,6 +17,11 @@ namespace Project2015To2017.Migrate2019.Tool
 	{
 		private static int Main(string[] args)
 		{
+			List<string> items = new List<string>();
+			items.Add("wizard");
+			items.Add(@"C:\_TFS\Main\Projets Vegetal\Analyses\Importation\WiuzImportAnalyse.sln");
+			args = items.ToArray();
+
 			ProgramBase.CreateLogger();
 
 			try
